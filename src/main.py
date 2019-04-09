@@ -1,6 +1,9 @@
 # Programa para treinar um perceptron.
 
-# Variáveis de controle
+# Pacotes importados:
+from random import random
+
+# Variáveis de controle:
 MINE = 1
 ROCK = 0
 
@@ -29,3 +32,7 @@ with open("./data/sonar.test-data", "r") as test_file:
     # Finalmente, extrair o label conforme o valor da última posição.
     test_labels = list(map(lambda x: MINE if(x[-1] == 'M') else ROCK, lines))
 
+# Inicialização dos pesos:
+weights = [(random() - 0.5) * 0.2 for i in range(len(test_features) + 1)]
+
+print(weights)
