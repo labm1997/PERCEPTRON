@@ -1,13 +1,13 @@
 # Package to extract data from sonar files.
 
 # Auxiliary functions:
-def extract_features(line_items):
-    features = list(map(float, line_items[:-1]))
+def extract_features(sample):
+    features = list(map(float, sample[:-1]))
     features.append(1.0)    # Add a constant input for bias weight.
     return features
 
-def extract_label(line_items, label_values = [1, 0]):
-    label = line_items[-1]
+def extract_label(sample, label_values):
+    label = sample[-1]
 
     if(label == 'M'):
         return label_values[0]
@@ -16,17 +16,17 @@ def extract_label(line_items, label_values = [1, 0]):
     else:
         return -1   # This indicates an error!
 
-def format_line(line):
+def extract_sample(line):
     treated_line = line.replace('\n', '')   # Remove '\n' to avoid confusion.
-    line_items = treated_line.split(',')
-    return line_items
+    sample = treated_line.split(',')
+    return sample
 
 # Main function:
-def extract_sonar_data(file_path, mine_value=1, rock_value=0):
+def extract_sonar_data(file_path, label_values=[1,0]):
 
     with open(file_path, "r") as file:
-        input_items = list(map(format_line, file.readlines()))
-        features = list(map(extract_features, input_items))
-        labels = list(map(extract_label, input_items))
+        samples = list(map(extract_sample, file.readlines()))
+        features = list(map(extract_features, samples))
+        labels = list(extract_label(sample, label_values) for sample in samples)
 
     return features, labels
