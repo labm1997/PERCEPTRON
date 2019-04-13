@@ -6,6 +6,16 @@ from random import random
 from perceptron import Perceptron
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+
+# Program arguments:
+if(len(sys.argv) != 3):
+    print("[Error] Number of program arguments is wrong!")
+    print("Usage: python src/main.py learn_constant num_of_epochs")
+    sys.exit(1)
+
+learn_constant = float(sys.argv[1])
+num_of_epochs = int(sys.argv[2])
 
 # Data extractor:
 train_features, train_labels = extract_sonar_data("./data/sonar.train-data")
@@ -15,10 +25,11 @@ test_features, test_labels = extract_sonar_data("./data/sonar.test-data")
 num_of_weights = len(train_features[0])
 
 # Initialize the perceptron
-perceptron = Perceptron(num_of_weights, learn_constant = 0.001)
+perceptron = Perceptron(num_of_weights, learn_constant)
 
 # Online Train, will return statistics
-error, hits = perceptron.online_train(train_features, train_labels, 5000)
+error, hits = perceptron.online_train(train_features, train_labels,
+                                      num_of_epochs)
 
 # Plot statistics
 plt.plot(error)
