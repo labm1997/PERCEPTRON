@@ -1,10 +1,12 @@
+import numpy as np
+
 # Package to extract data from sonar files.
 
 # Auxiliary functions:
 def extract_features(sample):
     features = list(map(float, sample[:-1]))
     features.append(1.0)    # Add a constant input for bias weight.
-    return features
+    return np.array(features)
 
 def extract_label(sample, label_values):
     label = sample[-1]
