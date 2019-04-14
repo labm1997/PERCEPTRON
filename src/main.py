@@ -25,7 +25,7 @@ test_features, test_labels = extract_sonar_data("./data/sonar.test-data")
 num_of_weights = len(train_features[0])
 
 # Initialize the perceptron
-perceptron = Perceptron(num_of_weights, learn_constant)
+perceptron = Perceptron(learn_constant = learn_constant, num_of_weights = num_of_weights)
 
 # Online Train, will return statistics
 error, hits = perceptron.online_train(train_features, train_labels,

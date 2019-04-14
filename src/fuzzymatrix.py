@@ -18,11 +18,11 @@ class FuzzyMatrix:
 
     def precision(self, label):
         predictedLabel = sum(map(lambda x: x[1], filter(lambda x: x[0][0] == label, self.matrix.items())))
-        predictedCorrectly = self.matrix[(label, label)]
+        predictedCorrectly = self.matrix.get((label, label), 0)
         return predictedCorrectly / float(predictedLabel)
 
     def sensitivity(self, label):
         expectedLabel = sum(map(lambda x: x[1], filter(lambda x: x[0][1] == label, self.matrix.items())))
-        predictedCorrectly = self.matrix[(label, label)]
+        predictedCorrectly = self.matrix.get((label, label), 0)
         return predictedCorrectly / float(expectedLabel)
 
