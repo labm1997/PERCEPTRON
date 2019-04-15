@@ -15,7 +15,7 @@ test_features, test_labels = extract_sonar_data("./data/sonar.test-data")
 # Constants and arguments
 if(len(sys.argv) != 3):
     print("[Error] Number of program arguments is wrong!")
-    print("Usage: python src/main.py learn_constant num_of_epochs")
+    print("Usage: python src/test.py learn_constant num_of_epochs")
     sys.exit(1)
 
 learn_constant = float(sys.argv[1])
@@ -39,8 +39,8 @@ def plot_moving_average(data, window, title):
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif")
 
-if not os.path.exists("resultados/"):
-    os.makedirs("resultados/")
+if not os.path.exists("out/"):
+    os.makedirs("out/")
 
 # Test plot
 f = plt.figure()
@@ -52,7 +52,7 @@ plot_moving_average(list(map(lambda x: x.precision(1)*100, testFuzzyMatrix)), wi
 plot_moving_average(list(map(lambda x: x.sensitivity(0)*100, testFuzzyMatrix)), windowSize, "Sensibilidade Rocha")
 plot_moving_average(list(map(lambda x: x.sensitivity(1)*100, testFuzzyMatrix)), windowSize, "Sensibilidade Mina")
 plt.legend(loc='best')
-plt.savefig("resultados/test.png", bbox_inches='tight')
+plt.savefig("out/test.png", bbox_inches='tight')
 plt.close(f)
 
 # Train plot
@@ -61,7 +61,7 @@ plt.title("Acurácia da época")
 plt.xlabel("Número da época")
 plot_moving_average(list(map(lambda x: x*100/len(train_features), trainHits)), windowSize, "Acurácia")
 plt.legend(loc='best')
-plt.savefig("resultados/train_accuracy.png", bbox_inches='tight')
+plt.savefig("out/train_accuracy.png", bbox_inches='tight')
 plt.close(f)
 
 f = plt.figure()
@@ -69,7 +69,7 @@ plt.title("Erro quadrático da época")
 plt.xlabel("Número da época")
 plot_moving_average(trainError, windowSize, "Erro quadrático")
 plt.legend(loc='best')
-plt.savefig("resultados/train_error.png", bbox_inches='tight')
+plt.savefig("out/train_error.png", bbox_inches='tight')
 plt.close(f)
 
 
