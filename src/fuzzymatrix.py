@@ -19,10 +19,14 @@ class FuzzyMatrix:
     def precision(self, label):
         predictedLabel = sum(map(lambda x: x[1], filter(lambda x: x[0][0] == label, self.matrix.items())))
         predictedCorrectly = self.matrix.get((label, label), 0)
-        return predictedCorrectly / float(predictedLabel)
+        try:
+            return predictedCorrectly/float(predictedLabel)
+        except ZeroDivisionError:
+            print("[Warn] Não foi possível computar a precisão da classe %s, o perceptron nunca previu essa classe" % str(label))
+            return 0
 
     def sensitivity(self, label):
         expectedLabel = sum(map(lambda x: x[1], filter(lambda x: x[0][1] == label, self.matrix.items())))
         predictedCorrectly = self.matrix.get((label, label), 0)
-        return predictedCorrectly / float(expectedLabel)
+        return predictedCorrectly/float(expectedLabel)
 

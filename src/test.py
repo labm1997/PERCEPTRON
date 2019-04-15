@@ -6,16 +6,23 @@ from random import random
 from perceptron import Perceptron
 import numpy as np
 import matplotlib.pyplot as plt
+import os, sys
 
 # Data extractor:
 train_features, train_labels = extract_sonar_data("./data/sonar.train-data")
 test_features, test_labels = extract_sonar_data("./data/sonar.test-data")
 
-# Weight initialization:
+# Constants and arguments
+if(len(sys.argv) != 3):
+    print("[Error] Number of program arguments is wrong!")
+    print("Usage: python src/main.py learn_constant num_of_epochs")
+    sys.exit(1)
+
+learn_constant = float(sys.argv[1])
+max_num_epochs = int(sys.argv[2])
+
 num_of_weights = len(train_features[0])
 weights = np.random.rand(num_of_weights)*2 - 1
-learn_constant = 0.001
-max_num_epochs = 30000
 windowSize = 100
 
 # Initialize the perceptron
@@ -24,14 +31,19 @@ perceptron = Perceptron(learn_constant = learn_constant, weights = weights)
 # Online Train, will return statistics
 trainError, trainHits, testFuzzyMatrix = perceptron.online_train_and_test(train_features, train_labels, max_num_epochs, test_features, test_labels)
 
-# Test plot
+# Plot with moving average
 def plot_moving_average(data, window, title):
     plt.plot(np.convolve(data, np.ones((window,))/window, mode='valid'), label = title)
 
+# Initial configuration
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif")
-f = plt.figure()
 
+if not os.path.exists("resultados/"):
+    os.makedirs("resultados/")
+
+# Test plot
+f = plt.figure()
 plt.title("Evolução do resultado dos testes ao longo do treinamento aplicando média móvel com janela %d" % windowSize)
 plt.xlabel("Número da época")
 plot_moving_average(list(map(lambda x: x.accuracy()*100, testFuzzyMatrix)), windowSize, "Acurácia")
