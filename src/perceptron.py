@@ -2,8 +2,8 @@ from fuzzymatrix import FuzzyMatrix
 import numpy as np
 
 class Perceptron:
-    def __init__(self, num_of_weights, learn_constant=0.01):
-        self.weights = np.random.rand(num_of_weights)*2 - 1
+    def __init__(self, num_of_weights = 0, learn_constant=0.01, weights=None):
+        self.weights = (weights.copy()) if(weights is not None) else (np.random.rand(num_of_weights)*2 - 1)
         self.learn_constant = learn_constant
 
     def activation_function(self, value):
@@ -45,3 +45,18 @@ class Perceptron:
             predicted = self.predict(feature)
             fuzzyMatrix.add(predicted, label)
         return fuzzyMatrix
+    
+    # With this method after each epoch we make the test and get statistics about it
+    def online_train_and_test(self, features, labels, nEpochMax, testFeatures, testLabels):
+        epochErrorList = []
+        epochHitsList = []
+        fuzzymatrixList = []
+
+        for i in range(0,nEpochMax):
+            epochSquaredError, epochHits = self.online_epoch(features, labels)
+            epochErrorList.append(epochSquaredError)
+            epochHitsList.append(epochHits)
+            fuzzymatrixList.append(self.test(testFeatures, testLabels))
+            
+        return epochErrorList, epochHitsList, fuzzymatrixList
+            
